@@ -31,11 +31,11 @@ class UserSeeder extends Seeder
 
         // Clients
         $clients = [
-            ['name' => 'Ngone Ka', 'email' => 'ngone.ka@test.com'],
-            ['name' => 'Alioune Dia', 'email' => 'alioune.dia@test.com'],
-            ['name' => 'Kine Yama Diop', 'email' => 'kine.diop@test.com'],
-            ['name' => 'Khady Ndao', 'email' => 'khady.ndao@test.com'],
-            ['name' => 'Moussa Fall', 'email' => 'moussa.fall@test.com'],
+            ['name' => 'Mamadou Diop', 'email' => 'mamadou.diop@gmail.com'],
+            ['name' => 'Khaly Diouf', 'email' => 'khaly.diouf@gmail.com'],
+            ['name' => 'Jaj', 'email' => 'jean.alioune@gmail.com'],
+            ['name' => 'Fatou Gaye', 'email' => 'fatou.gaye@gmail.com'],
+            ['name' => 'Mouhamed Diop', 'email' => 'mouhamed.diop@gmail.com'],
         ];
 
         foreach ($clients as $client) {
