@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\PaiementController;
+use App\Http\Controllers\Api\StatistiqueController;
 
 // Routes publiques (pas besoin d'être connecté)
 Route::post('/register', [AuthController::class, 'register']);
@@ -38,4 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Paiement d'un ticket (gestionnaire)
     Route::post('/tickets/{ticket}/paiement', [PaiementController::class, 'store']);
+
+    // Statistiques (gestionnaire)
+    Route::get('/statistiques/resume', [StatistiqueController::class, 'resume']);
+    Route::get('/statistiques/tickets-par-mois', [StatistiqueController::class, 'ticketsParMois']);
+    Route::get('/statistiques/ca-par-service', [StatistiqueController::class, 'caParService']);
 });
