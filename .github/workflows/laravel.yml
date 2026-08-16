@@ -1,0 +1,60 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [ "serigne_diallo_pressing" ]
+  pull_request:
+    branches: [ "serigne_diallo_pressing" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pressing_db_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pgsql, pdo_pgsql
+
+      - name: Copier le fichier .env
+        run: cp .env.example .env
+
+      - name: Installer les dépendances Composer
+        run: composer install --prefer-dist --no-progress
+
+      - name: Générer la clé d'application
+        run: php artisan key:generate
+
+      - name: Configurer la connexion à la base de test
+        run: |
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=pressing_db_test" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
+
+      - name: Lancer les migrations
+        run: php artisan migrate --force
+
+      - name: Lancer les tests
+        run: php artisan test
