@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\StatistiqueController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Catalogue des services visible par tous
+// Catalogue des services visible par tous (uniquement les services actifs)
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{service}', [ServiceController::class, 'show']);
 
@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    // Liste complète des services (actifs + inactifs), réservée au gestionnaire connecté
+    Route::get('/services-gestion', [ServiceController::class, 'indexTous']);
 
     // Gestion des services réservée au gestionnaire
     Route::post('/services', [ServiceController::class, 'store']);

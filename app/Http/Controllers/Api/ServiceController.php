@@ -12,9 +12,19 @@ use Illuminate\Http\JsonResponse;
 class ServiceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Catalogue public : uniquement les services actifs.
      */
     public function index(): JsonResponse
+    {
+        $services = Service::where('disponible', true)->get();
+
+        return response()->json(ServiceResource::collection($services));
+    }
+
+    /**
+     * Liste complète pour la gestion (gestionnaire connecté) : actifs + inactifs.
+     */
+    public function indexTous(): JsonResponse
     {
         $services = Service::all();
 
