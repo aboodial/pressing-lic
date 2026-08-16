@@ -40,6 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Changement de statut (gestionnaire)
     Route::patch('/tickets/{ticket}/statut', [TicketController::class, 'changerStatut']);
 
+    // Télécharger le reçu PDF
+    Route::get('/tickets/{ticket}/recu', [TicketController::class, 'telechargerRecu']);
+
     // Paiement d'un ticket (gestionnaire)
     Route::post('/tickets/{ticket}/paiement', [PaiementController::class, 'store']);
 

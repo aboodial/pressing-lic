@@ -9,6 +9,7 @@ use App\Mail\TicketConfirmationMail;
 use App\Mail\TicketPretMail;
 use App\Models\Service;
 use App\Models\Ticket;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -101,6 +102,26 @@ class TicketController extends Controller
         }
 
         return response()->json(new TicketResource($ticket));
+    }
+
+    /**
+     * Télécharger le reçu PDF d'un ticket (accessible au client propriétaire ou au gestionnaire).
+     */
+    public function telechargerRecu(Request $request, Ticket $ticket)
+    {
+        if ($request->user()->role === 'client' && $ticket->user_id !== $request->user()->id) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 403,
+                'message' => 'Accès non autorisé à ce ticket',
+            ], 403);
+        }
+
+        $ticket->load('lignes.service', 'user');
+
+        $pdf = Pdf::loadView('pdf.recu-ticket', ['ticket' => $ticket]);
+
+        return $pdf->download('recu-ticket-' . $ticket->id . '.pdf');
     }
 
     /**
